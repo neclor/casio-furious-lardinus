@@ -1,16 +1,12 @@
 
-from gamekit.systems.render.texture import Texture
 from systems.services import services
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 from game.context import GameContext
 from game.objects.dynamic_objects.entities.enemies.enemy import Enemy
 from game.objects.dynamic_objects.entities.enemies.skull import Skull
 from game.objects.active_objects.ammo import Ammo
 from game.objects.active_objects.medikit import Medikit
-
-
-_SPRITE: Texture = services.renderer.load_texture("src/assets/sprites/enemies/boss_128.png")
 
 
 class Boss(Enemy):
@@ -21,7 +17,7 @@ class Boss(Enemy):
         super().__init__(context, position)
         self.position_z = 0.0
         self.height = 128
-        self.sprite = _SPRITE
+        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/boss_128.png")
         self.speed = 96
         self.max_health = 500
         self.health = 500

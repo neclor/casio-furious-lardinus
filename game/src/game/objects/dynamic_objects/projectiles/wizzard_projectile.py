@@ -1,7 +1,7 @@
 
 from gamekit.systems.render.texture import Texture
 from systems.services import services
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 import settings as Settings
 

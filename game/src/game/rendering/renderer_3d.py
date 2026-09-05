@@ -1,7 +1,7 @@
 
 import math
 
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 from gamekit.math.rects import Rect2, Rect2i
 from gamekit.systems.render.texture import Texture
 

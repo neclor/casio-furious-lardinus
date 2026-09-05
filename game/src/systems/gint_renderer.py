@@ -98,22 +98,31 @@ class GintFont(Font):
 
 
 class GintRenderer(Renderer):
-    __slots__ = ("_commands",)
+    __slots__ = ("_commands", "_textures")
 
     _commands: "list[_RenderCommand]"
+    _textures: "dict[str, Texture]"
 
     def __init__(self) -> None:
         self._commands = []
+        self._textures = {}
 
     @property
     def size(self) -> Vector2i: return Vector2i(gint.DWIDTH, gint.DHEIGHT)
 
     def load_texture(self, path: str) -> Texture:
-        module = __import__(_to_module_name(path), None, None, ("image",), 0)
-        return GintTexture(module.image)
+        texture = self._textures.get(path)
+        if texture is None:
+            module = __import__(_to_module_name(path), None, None, ("image",), 0)
+            texture = GintTexture(module.image)
+            self._textures[path] = texture
+        return texture
 
     def load_font(self, path: str, size: int) -> Font:
-        raise NotImplementedError
+        # No OTF -> gint.font conversion pipeline exists yet (unlike sprites, which
+        # go through tools/build_gint_textures.py), so fall back to gint's builtin
+        # font: dfont(None) resets to it, and these are its approximate metrics.
+        return GintFont(None, height=7, char_width=5, widths=None)
 
     def clear(self, color: "Color") -> None: gint.dclear(_to_gint_color(color))
 

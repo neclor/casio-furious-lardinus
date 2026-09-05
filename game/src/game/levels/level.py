@@ -1,4 +1,4 @@
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 from gamekit.systems.render.color import Color
 
 import game.levels.layouts as Layouts

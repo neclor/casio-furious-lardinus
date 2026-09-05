@@ -1,5 +1,3 @@
-import math
-
 from gamekit.math.utils import *
 
 TYPE_CHECKING = False
@@ -14,9 +12,6 @@ class Vector2i:
 
     x: int
     y: int
-
-    AXIS_X: int = 0
-    AXIS_Y: int = 1
 
     ZERO: "Vector2i"
     ONE: "Vector2i"
@@ -40,59 +35,6 @@ class Vector2i:
             ix, iy = int(x.x), int(x.y)
         self.x = ix
         self.y = iy
-
-    def with_x(self, x: int) -> "Vector2i": return Vector2i(x, self.y)
-    def with_y(self, y: int) -> "Vector2i": return Vector2i(self.x, y)
-    def copy(self) -> "Vector2i": return Vector2i(self.x, self.y)
-
-    def set(self, x: int, y: int) -> "Vector2i":
-        self.x = int(x)
-        self.y = int(y)
-        return self
-
-    def abs(self) -> "Vector2i": return Vector2i(abs(self.x), abs(self.y))
-
-    def aspect(self) -> float:
-        if self.y == 0:
-            return float("inf") if self.x > 0 else (float("-inf") if self.x < 0 else float("nan"))
-        return self.x / self.y
-
-    def clamp(self, min: "Vector2i", max: "Vector2i") -> "Vector2i": return Vector2i(clampi(self.x, min.x, max.x), clampi(self.y, min.y, max.y))
-
-    def clampi(self, min: int, max: int) -> "Vector2i": return Vector2i(clampi(self.x, min, max), clampi(self.y, min, max))
-
-    def decay(self, to: "Vector2i", decay: float, delta: float) -> "Vector2i": return self.lerp(to, decay_weight(decay, delta))
-
-    def distance_squared_to(self, to: "Vector2i") -> int:
-        dx = to.x - self.x
-        dy = to.y - self.y
-        return dx * dx + dy * dy
-
-    def distance_to(self, to: "Vector2i") -> float: return math.sqrt(self.distance_squared_to(to))
-
-    def length(self) -> float: return math.sqrt(self.x * self.x + self.y * self.y)
-
-    def length_squared(self) -> int: return self.x * self.x + self.y * self.y
-
-    def lerp(self, to: "Vector2i", weight: float) -> "Vector2i": return Vector2i(lerpi(self.x, to.x, weight), lerpi(self.y, to.y, weight))
-
-    def max(self, with_: "Vector2i") -> "Vector2i": return Vector2i(max(self.x, with_.x), max(self.y, with_.y))
-
-    def maxi(self, with_: int) -> "Vector2i": return Vector2i(max(self.x, with_), max(self.y, with_))
-
-    def max_axis_index(self) -> int: return Vector2i.AXIS_Y if self.x < self.y else Vector2i.AXIS_X
-
-    def min(self, with_: "Vector2i") -> "Vector2i": return Vector2i(min(self.x, with_.x), min(self.y, with_.y))
-
-    def mini(self, with_: int) -> "Vector2i": return Vector2i(min(self.x, with_), min(self.y, with_))
-
-    def min_axis_index(self) -> int: return Vector2i.AXIS_X if self.x < self.y else Vector2i.AXIS_Y
-
-    def sign(self) -> "Vector2i": return Vector2i(signi(self.x), signi(self.y))
-
-    def snapped(self, step: "Vector2i") -> "Vector2i": return Vector2i(snappedi(self.x, step.x), snappedi(self.y, step.y))
-
-    def snappedi(self, step: int) -> "Vector2i": return Vector2i(snappedi(self.x, step), snappedi(self.y, step))
 
     def __add__(self, o: "Vector2i") -> "Vector2i": return Vector2i(self.x + o.x, self.y + o.y)
 

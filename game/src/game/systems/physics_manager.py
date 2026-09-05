@@ -1,6 +1,6 @@
 TYPE_CHECKING = False
 
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 from gamekit.math.utils import clampf
 
 from game.context import GameContext

@@ -1,16 +1,12 @@
 
-from gamekit.systems.render.texture import Texture
 from systems.services import services
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 from game.context import GameContext
 from game.objects.active_objects.active_object import ActiveObject
 from game.objects.dynamic_objects.entities.player import Player
 from game.objects.game_object import GameObject
 from game.levels.tiles import Tile
-
-
-_SPRITE: Texture = services.renderer.load_texture("src/assets/sprites/objects/exit.png")
 
 
 class Exit(ActiveObject):
@@ -22,7 +18,7 @@ class Exit(ActiveObject):
         self.radius = 16
         self.position_z = 0.0
         self.height = 64
-        self.sprite = _SPRITE
+        self.sprite = services.renderer.load_texture("src/assets/sprites/objects/exit.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:

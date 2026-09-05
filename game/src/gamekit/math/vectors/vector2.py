@@ -15,9 +15,6 @@ class Vector2:
     x: float
     y: float
 
-    AXIS_X: int = 0
-    AXIS_Y: int = 1
-
     ZERO: "Vector2"
     ONE: "Vector2"
     INF: "Vector2"
@@ -40,8 +37,6 @@ class Vector2:
         self.x = fx
         self.y = fy
 
-    def with_x(self, x: float) -> "Vector2": return Vector2(x, self.y)
-    def with_y(self, y: float) -> "Vector2": return Vector2(self.x, y)
     def copy(self) -> "Vector2": return Vector2(self.x, self.y)
 
     def set(self, x: float, y: float) -> "Vector2":
@@ -49,129 +44,19 @@ class Vector2:
         self.y = float(y)
         return self
 
-    def abs(self) -> "Vector2": return Vector2(abs(self.x), abs(self.y))
-
-    def angle(self) -> float: return math.atan2(self.y, self.x)
-
-    def angle_to(self, to: "Vector2") -> float: return math.atan2(self.cross(to), self.dot(to))
-
-    def angle_to_point(self, to: "Vector2") -> float: return math.atan2(to.y - self.y, to.x - self.x)
-
-    def aspect(self) -> float:
-        if self.y == 0.0:
-            return float("inf") if self.x > 0.0 else (float("-inf") if self.x < 0.0 else float("nan"))
-        return self.x / self.y
-
-    def bezier_derivative(self, control_1: "Vector2", control_2: "Vector2", end: "Vector2", t: float) -> "Vector2":
-        omt = 1.0 - t
-        omt2 = omt * omt
-        t2 = t * t
-        return (self * (-3.0 * omt2)
-                + control_1 * (3.0 * omt2 - 6.0 * omt * t)
-                + control_2 * (6.0 * omt * t - 3.0 * t2)
-                + end * (3.0 * t2))
-
-    def bezier_interpolate(self, control_1: "Vector2", control_2: "Vector2", end: "Vector2", t: float) -> "Vector2":
-        omt = 1.0 - t
-        omt2 = omt * omt
-        omt3 = omt2 * omt
-        t2 = t * t
-        t3 = t2 * t
-        return (self * omt3
-                + control_1 * (omt2 * t * 3.0)
-                + control_2 * (omt * t2 * 3.0)
-                + end * t3)
-
-    def bounce(self, n: "Vector2") -> "Vector2": return -self.reflect(n)
-
     def ceil(self) -> "Vector2": return Vector2(math.ceil(self.x), math.ceil(self.y))
-
-    def clamp(self, min: "Vector2", max: "Vector2") -> "Vector2": return Vector2(clampf(self.x, min.x, max.x), clampf(self.y, min.y, max.y))
-
-    def clampf(self, min: float, max: float) -> "Vector2": return Vector2(clampf(self.x, min, max), clampf(self.y, min, max))
-
-    def cross(self, with_: "Vector2") -> float: return self.x * with_.y - self.y * with_.x
-
-    def cubic_interpolate(self, b: "Vector2", pre_a: "Vector2", post_b: "Vector2", weight: float) -> "Vector2":
-        return Vector2(cubic_interpolate(self.x, b.x, pre_a.x, post_b.x, weight),
-                       cubic_interpolate(self.y, b.y, pre_a.y, post_b.y, weight))
-
-    def cubic_interpolate_in_time(
-        self,
-        b: "Vector2",
-        pre_a: "Vector2",
-        post_b: "Vector2",
-        weight: float,
-        b_t: float,
-        pre_a_t: float,
-        post_b_t: float,
-    ) -> "Vector2":
-        return Vector2(
-            cubic_interpolate_in_time(self.x, b.x, pre_a.x, post_b.x, weight, b_t, pre_a_t, post_b_t),
-            cubic_interpolate_in_time(self.y, b.y, pre_a.y, post_b.y, weight, b_t, pre_a_t, post_b_t))
-
-    def decay(self, to: "Vector2", decay: float, delta: float) -> "Vector2": return self.lerp(to, decay_weight(decay, delta))
-
-    def direction_to(self, to: "Vector2") -> "Vector2": return Vector2(to.x - self.x, to.y - self.y).normalized()
-
-    def distance_squared_to(self, to: "Vector2") -> float:
-        dx = to.x - self.x
-        dy = to.y - self.y
-        return dx * dx + dy * dy
-
-    def distance_to(self, to: "Vector2") -> float: return math.sqrt(self.distance_squared_to(to))
-
-    def dot(self, with_: "Vector2") -> float: return self.x * with_.x + self.y * with_.y
 
     def exp(self) -> "Vector2": return Vector2(math.exp(self.x), math.exp(self.y))
 
     def floor(self) -> "Vector2": return Vector2(math.floor(self.x), math.floor(self.y))
 
-    @staticmethod
-    def from_angle(angle: float) -> "Vector2": return Vector2(math.cos(angle), math.sin(angle))
-
     def is_equal_approx(self, to: "Vector2") -> bool: return is_equal_approx(self.x, to.x) and is_equal_approx(self.y, to.y)
 
     def is_finite(self) -> bool: return math.isfinite(self.x) and math.isfinite(self.y)
 
-    def is_normalized(self) -> bool: return abs(self.length_squared() - 1.0) < UNIT_EPSILON
-
-    def is_zero_approx(self) -> bool: return is_zero_approx(self.x) and is_zero_approx(self.y)
-
     def length(self) -> float: return math.sqrt(self.x * self.x + self.y * self.y)
 
-    def length_squared(self) -> float: return self.x * self.x + self.y * self.y
-
     def lerp(self, to: "Vector2", weight: float) -> "Vector2": return Vector2(lerp(self.x, to.x, weight), lerp(self.y, to.y, weight))
-
-    def limit_length(self, length: float = 1.0) -> "Vector2":
-        l = self.length()
-        vx, vy = self.x, self.y
-        if l > 0.0 and length < l:
-            scale = length / l
-            vx *= scale
-            vy *= scale
-        return Vector2(vx, vy)
-
-    def max(self, with_: "Vector2") -> "Vector2": return Vector2(max(self.x, with_.x), max(self.y, with_.y))
-
-    def maxf(self, with_: float) -> "Vector2": return Vector2(max(self.x, with_), max(self.y, with_))
-
-    def max_axis_index(self) -> int: return Vector2.AXIS_Y if self.x < self.y else Vector2.AXIS_X
-
-    def min(self, with_: "Vector2") -> "Vector2": return Vector2(min(self.x, with_.x), min(self.y, with_.y))
-
-    def minf(self, with_: float) -> "Vector2": return Vector2(min(self.x, with_), min(self.y, with_))
-
-    def min_axis_index(self) -> int: return Vector2.AXIS_X if self.x < self.y else Vector2.AXIS_Y
-
-    def move_toward(self, to: "Vector2", delta: float) -> "Vector2":
-        dx = to.x - self.x
-        dy = to.y - self.y
-        length = math.sqrt(dx * dx + dy * dy)
-        if length <= delta or length < CMP_EPSILON:
-            return Vector2(to.x, to.y)
-        return Vector2(self.x + dx / length * delta, self.y + dy / length * delta)
 
     def normalized(self) -> "Vector2":
         l = self.length()
@@ -179,40 +64,12 @@ class Vector2:
             return Vector2(0.0, 0.0)
         return Vector2(self.x / l, self.y / l)
 
-    def orthogonal(self) -> "Vector2": return Vector2(self.y, -self.x)
-
-    def posmod(self, mod: float) -> "Vector2": return Vector2(fposmod(self.x, mod), fposmod(self.y, mod))
-
-    def posmodv(self, modv: "Vector2") -> "Vector2": return Vector2(fposmod(self.x, modv.x), fposmod(self.y, modv.y))
-
-    def project(self, b: "Vector2") -> "Vector2": return b * (self.dot(b) / b.length_squared())
-
-    def reflect(self, line: "Vector2") -> "Vector2": return 2.0 * line * self.dot(line) - self
-
     def rotated(self, angle: float) -> "Vector2":
         c = math.cos(angle)
         s = math.sin(angle)
         return Vector2(self.x * c - self.y * s, self.x * s + self.y * c)
 
     def round(self) -> "Vector2": return Vector2(round_half_away(self.x), round_half_away(self.y))
-
-    def sign(self) -> "Vector2": return Vector2(signf(self.x), signf(self.y))
-
-    def slerp(self, to: "Vector2", weight: float) -> "Vector2":
-        start_length_sq = self.length_squared()
-        end_length_sq = to.length_squared()
-        if start_length_sq == 0.0 or end_length_sq == 0.0:
-            return self.lerp(to, weight)
-        start_length = math.sqrt(start_length_sq)
-        result_length = lerp(start_length, math.sqrt(end_length_sq), weight)
-        angle = self.angle_to(to)
-        return self.rotated(angle * weight) * (result_length / start_length)
-
-    def slide(self, n: "Vector2") -> "Vector2": return self - n * self.dot(n)
-
-    def snapped(self, step: "Vector2") -> "Vector2": return Vector2(snapped(self.x, step.x), snapped(self.y, step.y))
-
-    def snappedf(self, step: float) -> "Vector2": return Vector2(snapped(self.x, step), snapped(self.y, step))
 
     def __add__(self, o: "Vector2") -> "Vector2": return Vector2(self.x + o.x, self.y + o.y)
 

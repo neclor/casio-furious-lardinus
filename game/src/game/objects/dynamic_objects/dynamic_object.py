@@ -1,4 +1,4 @@
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 from game.context import GameContext
 from game.objects.game_object import GameObject

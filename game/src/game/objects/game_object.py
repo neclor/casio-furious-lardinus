@@ -1,4 +1,4 @@
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 from gamekit.systems.render.texture import Texture
 
 from game.context import GameContext

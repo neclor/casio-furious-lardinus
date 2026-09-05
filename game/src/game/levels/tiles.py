@@ -1,4 +1,4 @@
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 from gamekit.systems.render.texture import Texture
 
 from systems.services import services
@@ -40,19 +40,32 @@ class Tile:
 
 
 class TileSet:
-    __slots__ = ("tile_size", "_tiles")
+    __slots__ = ("tile_size", "_tiles", "_specs")
 
     tile_size: Vector2
     _tiles: dict[str, Tile]
+    _specs: dict[str, tuple[str, dict]]
 
 
-    def __init__(self, tile_size: Vector2, tiles: dict[str, Tile]) -> None:
+    def __init__(self, tile_size: Vector2, specs: dict[str, tuple[str, dict]]) -> None:
         self.tile_size = tile_size
-        self._tiles = tiles
+        self._tiles = {}
+        self._specs = specs
 
 
     def get(self, char: str) -> Tile | None:
-        return self._tiles.get(char)
+        tile = self._tiles.get(char)
+        if tile is not None:
+            return tile
+
+        spec = self._specs.get(char)
+        if spec is None:
+            return None
+
+        name, kwargs = spec
+        tile = Tile(_load(name), **kwargs)
+        self._tiles[char] = tile
+        return tile
 
 
 def _load(name: str) -> Texture:
@@ -60,18 +73,20 @@ def _load(name: str) -> Texture:
 
 
 def build_tile_set() -> TileSet:
+    # Textures are loaded lazily on first use (see TileSet.get) instead of all at
+    # once here, since no single level layout uses every tile type.
     return TileSet(
         Vector2(64, 64),
         {
-            "<": Tile(_load("wall_move.png")),
-            "=": Tile(_load("wall_weapons.png")),
-            "+": Tile(_load("wall_shoot.png")),
-            ">": Tile(_load("wall_secret_tutorial.png")),
-            "1": Tile(_load("wall_64_128.png")),
-            "#": Tile(_load("wall_transparent.png"),
-                      collision_layer=Settings.OBSTACLE, transparent=True),
-            "?": Tile(_load("secret_wall_64_128.png"), collidable=False),
-            "$": Tile(_load("secret_message.png")),
-            "!": Tile(_load("end_tile.png")),
+            "<": ("wall_move.png", {}),
+            "=": ("wall_weapons.png", {}),
+            "+": ("wall_shoot.png", {}),
+            ">": ("wall_secret_tutorial.png", {}),
+            "1": ("wall_64_128.png", {}),
+            "#": ("wall_transparent.png",
+                  {"collision_layer": Settings.OBSTACLE, "transparent": True}),
+            "?": ("secret_wall_64_128.png", {"collidable": False}),
+            "$": ("secret_message.png", {}),
+            "!": ("end_tile.png", {}),
         },
     )

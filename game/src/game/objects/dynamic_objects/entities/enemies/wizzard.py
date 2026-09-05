@@ -1,7 +1,6 @@
 
-from gamekit.systems.render.texture import Texture
 from systems.services import services
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 from game.context import GameContext
 from game.objects.dynamic_objects.entities.enemies.enemy import Enemy
@@ -9,7 +8,6 @@ from game.objects.dynamic_objects.projectiles.wizzard_projectile import WizzardP
 from game.objects.active_objects.ammo import Ammo
 
 
-_SPRITE: Texture = services.renderer.load_texture("src/assets/sprites/enemies/wizzard_32_48.png")
 _PROJECTILE_SPEED: int = 192
 
 
@@ -21,7 +19,7 @@ class Wizzard(Enemy):
         super().__init__(context, position)
         self.position_z = 0.0
         self.height = 48
-        self.sprite = _SPRITE
+        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/wizzard_32_48.png")
         self.speed = 32
         self.max_health = 100
         self.health = 100

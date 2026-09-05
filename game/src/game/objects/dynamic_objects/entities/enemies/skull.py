@@ -1,7 +1,6 @@
 
-from gamekit.systems.render.texture import Texture
 from systems.services import services
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 import settings as Settings
 
@@ -10,9 +9,6 @@ from game.objects.dynamic_objects.entities.enemies.enemy import Enemy
 from game.objects.dynamic_objects.entities.player import Player
 from game.objects.game_object import GameObject
 from game.levels.tiles import Tile
-
-
-_SPRITE: Texture = services.renderer.load_texture("src/assets/sprites/enemies/skull_32.png")
 
 
 class Skull(Enemy):
@@ -27,7 +23,7 @@ class Skull(Enemy):
 
         self.position_z = -32.0
         self.height = 32
-        self.sprite = _SPRITE
+        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/skull_32.png")
         self.speed = 128
         self.max_health = 50
         self.health = 50

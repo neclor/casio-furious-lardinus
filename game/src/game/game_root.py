@@ -1,4 +1,4 @@
-from gamekit.math.vectors import Vector2
+from gamekit.math.vectors.vector2 import Vector2
 
 from systems.services import services
 from actions import Actions
