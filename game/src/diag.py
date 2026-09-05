@@ -1,4 +1,5 @@
 import sys
+import gc
 
 names = [
     "flgame.context",
@@ -35,6 +36,8 @@ names = [
 ok_count = 0
 fail_count = 0
 for name in names:
+    gc.collect()
+    print("free before:", gc.mem_free())
     try:
         __import__(name)
         print("OK  ", name)
@@ -43,6 +46,7 @@ for name in names:
         print("FAIL", name)
         sys.print_exception(e)
         fail_count += 1
+    gc.collect()
 
 print("---")
 print("ok:", ok_count, "fail:", fail_count)

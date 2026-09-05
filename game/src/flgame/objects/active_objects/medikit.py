@@ -18,7 +18,7 @@ class Medikit(ActiveObject):
 
     def __init__(self, context: GameContext, position: Vector2) -> None:
         super().__init__(context, position)
-        self.sprite = services.renderer.load_texture("src/assets/sprites/objects/medikit_16.png")
+        self.sprite = services.renderer.load_texture("src/assets/sprites/objects/medikit_4.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:

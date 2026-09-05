@@ -48,6 +48,17 @@ jobs:
         with:
           ref: ${{ steps.tag.outputs.tag }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Pillow
+        run: pip install Pillow
+
+      - name: Build gint textures
+        run: python tools/build_gint_textures.py
+
       - name: Package calculator game files
         env:
           TAG: ${{ steps.tag.outputs.tag }}

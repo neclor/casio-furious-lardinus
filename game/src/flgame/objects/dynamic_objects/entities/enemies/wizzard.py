@@ -19,7 +19,7 @@ class Wizzard(Enemy):
         super().__init__(context, position)
         self.position_z = 0.0
         self.height = 48
-        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/wizzard_32_48.png")
+        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/wizzard_8_12.png")
         self.speed = 32
         self.max_health = 100
         self.health = 100

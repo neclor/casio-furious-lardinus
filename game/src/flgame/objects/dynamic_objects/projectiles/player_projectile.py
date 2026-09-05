@@ -24,7 +24,7 @@ class PlayerProjectile(Projectile):
     ) -> None:
         super().__init__(context, damage, position, velocity)
         self.collision_mask = Settings.WALL | Settings.ENEMY
-        self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/player_projectile_8.png")
+        self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/player_projectile_4.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:

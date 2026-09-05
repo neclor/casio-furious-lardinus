@@ -27,7 +27,7 @@ class WizzardProjectile(Projectile):
         self.radius = 8
         self.position_z = -8.0
         self.height = 16
-        self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/wizzard_projectile_16.png")
+        self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/wizzard_projectile_8.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:

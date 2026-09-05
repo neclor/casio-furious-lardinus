@@ -43,9 +43,24 @@ def _ensure_init_py(directory: str) -> None:
         open(init_path, "w").close()
 
 
+def _remove_orphaned_py(root: str, files: list[str]) -> None:
+    # A .py sprite module whose source .png was deleted/renamed is stale and
+    # would otherwise sit around unused, wasting flash/RAM if left in place.
+    pngs = {os.path.splitext(f)[0] for f in files if f.lower().endswith(".png")}
+    for filename in files:
+        if not filename.endswith(".py") or filename == "__init__.py":
+            continue
+        if os.path.splitext(filename)[0] not in pngs:
+            path = os.path.join(root, filename)
+            os.remove(path)
+            print("removed orphan", path)
+
+
 def main() -> None:
     init_dirs = set()
     for root, _dirs, files in os.walk(_ASSETS_DIR):
+        _remove_orphaned_py(root, files)
+
         pngs = [f for f in files if f.lower().endswith(".png")]
         if not pngs:
             continue

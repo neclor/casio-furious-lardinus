@@ -23,7 +23,7 @@ class Skull(Enemy):
 
         self.position_z = -32.0
         self.height = 32
-        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/skull_32.png")
+        self.sprite = services.renderer.load_texture("src/assets/sprites/enemies/skull_8.png")
         self.speed = 128
         self.max_health = 50
         self.health = 50

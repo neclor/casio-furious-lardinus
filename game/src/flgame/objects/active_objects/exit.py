@@ -18,7 +18,7 @@ class Exit(ActiveObject):
         self.radius = 16
         self.position_z = 0.0
         self.height = 64
-        self.sprite = services.renderer.load_texture("src/assets/sprites/objects/exit.png")
+        self.sprite = services.renderer.load_texture("src/assets/sprites/objects/exit_8_16.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:
