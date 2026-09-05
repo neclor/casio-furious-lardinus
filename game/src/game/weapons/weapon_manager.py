@@ -1,4 +1,3 @@
-import math
 import random
 
 from gamekit.math.vectors import Vector2
@@ -28,7 +27,7 @@ class WeaponManager:
 
     def __init__(self, context: GameContext) -> None:
         self.context = context
-        self.gun = Weapon("Gun", damage=20, max_ammo=math.inf, cooldown=0.3)
+        self.gun = Weapon("Gun", damage=20, max_ammo=float("inf"), cooldown=0.3)
         self.shotgun = Weapon("Shotgun", damage=30, max_ammo=100, cooldown=0.5)
         self.assault = Weapon("Assault Rifle", damage=15, max_ammo=200, cooldown=0.1)
         self.current = self.gun

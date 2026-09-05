@@ -172,12 +172,12 @@ class Renderer3D:
         tile_projections: list[_Projection] = []
 
         ray_relative_angle = ray_rotation - self._rotation
-        ray_rotation = ray_rotation % math.tau
+        ray_rotation = ray_rotation % (2 * math.pi)
         ray_sign = Vector2(
-            (Settings.THREE_HALF_PI < ray_rotation <= math.tau
+            (Settings.THREE_HALF_PI < ray_rotation <= (2 * math.pi)
              or 0 <= ray_rotation < Settings.HALF_PI)
             - (Settings.HALF_PI < ray_rotation < Settings.THREE_HALF_PI),
-            (0 < ray_rotation < math.pi) - (math.pi < ray_rotation < math.tau),
+            (0 < ray_rotation < math.pi) - (math.pi < ray_rotation < (2 * math.pi)),
         )
         signed_tile_size = Vector2(
             ray_sign.x * tile_size.x, ray_sign.y * tile_size.y
@@ -213,7 +213,7 @@ class Renderer3D:
             delta_ratio = (
                 delta_next_line.y / delta_next_line.x
                 if delta_next_line.x != 0
-                else math.inf
+                else float("inf")
             )
             tan_delta_difference = abs_ray_tan - abs(delta_ratio)
             if tan_delta_difference < 0:

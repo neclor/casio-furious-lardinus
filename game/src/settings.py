@@ -10,11 +10,11 @@ fps: int = 30
 
 
 camera_sensitivity: float = 1.0
-fov_h: float = math.tau / 3
+fov_h: float = 2 * math.pi / 3
 
 
 MIN_FOV_H: float = math.pi / 3
-MAX_FOV_H: float = math.tau / 3
+MAX_FOV_H: float = 2 * math.pi / 3
 fps_amplitude: int = 20
 current_fps: float = fps
 

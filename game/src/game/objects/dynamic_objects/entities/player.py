@@ -80,12 +80,12 @@ class Player(Entity):
             * Settings.camera_sensitivity
             + turn * _TURN_SPEED * delta
         )
-        self.rotation = (self.rotation + yaw) % math.tau
+        self.rotation = (self.rotation + yaw) % (2 * math.pi)
 
 
     def _bob(self, delta: float) -> None:
         self.bobbing_timer = (
             self.bobbing_timer
             + self.velocity.length() * _BOBBING_SPEED * delta
-        ) % math.tau
+        ) % (2 * math.pi)
         self.position_z = math.sin(self.bobbing_timer) * _BOBBING_AMPLITUDE
