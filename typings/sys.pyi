@@ -1,0 +1,6 @@
+from types import ModuleType
+
+modules: dict[str, ModuleType]
+
+def exit(retval: int = 0) -> None: ...
+def print_exception(exc: BaseException) -> None: ...
