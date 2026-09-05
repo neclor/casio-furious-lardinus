@@ -14,7 +14,6 @@ never talks to `gint` directly.
 - [Installing on a calculator](#installing-on-a-calculator)
 - [Controls](#controls)
 - [Building assets from source](#building-assets-from-source)
-- [Releases](#releases)
 - [Links](#links)
 
 ## Project layout
@@ -75,14 +74,6 @@ python tools/build_gint_textures.py
 This reuses fx-SDK's real `fxconv` conversion code (PNG quantization to the 4-shade
 `gray_alpha` palette + bitplane packing) and writes a `.py` sibling next to every
 `game/src/assets/sprites/**/*.png`.
-
-## Releases
-
-Tagging a release (`X.Y.Z`) runs `.github/workflows/release.yml`, which publishes two assets:
-
-- `PythonEx.g1a` — the PythonExtra add-in, taken as-is from the vendored release in `tools/`.
-- `furious-lardinus-<tag>-game.zip` — `game/lib` + `game/src`, trimmed of source PNGs, unused
-  fonts, and the PC-only pygame backend, ready to drop onto the calculator as a `game` folder.
 
 ## Links
 
