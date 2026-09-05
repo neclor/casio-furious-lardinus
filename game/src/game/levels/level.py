@@ -12,7 +12,6 @@ from game.objects.dynamic_objects.entities.enemies.knight import Knight
 from game.objects.dynamic_objects.entities.enemies.skull import Skull
 from game.objects.dynamic_objects.entities.enemies.summoner import Summoner
 from game.objects.dynamic_objects.entities.enemies.wizzard import Wizzard
-from game.objects.dynamic_objects.entities.enemies.boss import Boss
 from game.objects.game_object import GameObject
 
 
@@ -26,7 +25,6 @@ class Level:
         "U": Summoner,
         "W": Wizzard,
         "E": Exit,
-        "B": Boss,
     }
 
     __slots__ = (

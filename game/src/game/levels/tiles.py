@@ -1,8 +1,12 @@
 from gamekit.math.vectors.vector2 import Vector2
-from gamekit.systems.render.texture import Texture
 
-from systems.services import services
+import systems.services as services
 import settings as Settings
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from systems.gint_renderer import GintTexture
 
 
 class Tile:
@@ -15,14 +19,14 @@ class Tile:
     collidable: bool
     static: bool
     transparent: bool
-    texture: Texture
+    texture: "GintTexture"
     position_z: float
     height: int
 
 
     def __init__(
         self,
-        texture: Texture,
+        texture: "GintTexture",
         *,
         collision_layer: int = Settings.WALL,
         collidable: bool = True,
@@ -68,7 +72,7 @@ class TileSet:
         return tile
 
 
-def _load(name: str) -> Texture:
+def _load(name: str) -> "GintTexture":
     return services.renderer.load_texture("src/assets/sprites/tiles/" + name)
 
 

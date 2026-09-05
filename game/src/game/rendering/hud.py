@@ -1,10 +1,14 @@
 from gamekit.math.vectors.vector2 import Vector2
 from gamekit.systems.render.color import Color
-from gamekit.systems.render.font import Font
 
 import settings as Settings
-from systems.services import services
+import systems.services as services
 from game.context import GameContext
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from systems.gint_renderer import GintFont
 
 
 _FONT_SIZE: int = 24
@@ -15,7 +19,7 @@ class Hud:
     __slots__ = ("context", "_font")
 
     context: GameContext
-    _font: Font
+    _font: "GintFont"
 
 
     def __init__(self, context: GameContext) -> None:

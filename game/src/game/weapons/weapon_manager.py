@@ -4,7 +4,7 @@ from gamekit.math.vectors.vector2 import Vector2
 
 import settings as Settings
 
-from systems.services import services
+import systems.services as services
 from actions import Actions
 from game.context import GameContext
 from game.weapons.weapon import Weapon

@@ -1,6 +1,5 @@
 
-from gamekit.systems.render.texture import Texture
-from systems.services import services
+import systems.services as services
 from gamekit.math.vectors.vector2 import Vector2
 
 import settings as Settings
@@ -10,11 +9,6 @@ from game.objects.dynamic_objects.projectiles.projectile import Projectile
 from game.objects.dynamic_objects.entities.enemies.enemy import Enemy
 from game.objects.game_object import GameObject
 from game.levels.tiles import Tile
-
-
-_SPRITE: Texture = services.renderer.load_texture(
-    "src/assets/sprites/projectiles/player_projectile_8.png"
-)
 
 
 class PlayerProjectile(Projectile):
@@ -30,7 +24,7 @@ class PlayerProjectile(Projectile):
     ) -> None:
         super().__init__(context, damage, position, velocity)
         self.collision_mask = Settings.WALL | Settings.ENEMY
-        self.sprite = _SPRITE
+        self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/player_projectile_8.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:

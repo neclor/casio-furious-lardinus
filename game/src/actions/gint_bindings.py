@@ -1,6 +1,6 @@
-from gamekit.systems.input import Key
+from gamekit.systems import key as Key
 
-from actions.definitions import Actions
+from actions import definitions as Actions
 
 
 def bind() -> None:

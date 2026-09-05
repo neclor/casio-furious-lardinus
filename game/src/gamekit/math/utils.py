@@ -12,7 +12,6 @@ def clampf(v: float, lo: float, hi: float) -> float: return lo if v < lo else (h
 
 def round_half_away(v: float) -> float: return float(math.floor(v + 0.5)) if v >= 0.0 else float(math.ceil(v - 0.5))
 
-
 def idiv(a: int, b: int) -> int:
     q = abs(a) // abs(b)
     return -q if (a < 0) != (b < 0) else q

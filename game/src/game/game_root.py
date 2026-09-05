@@ -1,6 +1,6 @@
 from gamekit.math.vectors.vector2 import Vector2
 
-from systems.services import services
+import systems.services as services
 from actions import Actions
 from game.context import GameContext
 from game.world import World
@@ -21,7 +21,6 @@ class GameRoot:
     def __init__(self) -> None:
         self._timer = 0.0
         self._paused = False
-        self._set_mouse_visible(False)
 
         context: GameContext = GameContext()
         context.game = self
@@ -52,8 +51,3 @@ class GameRoot:
 
     def _toggle_pause(self) -> None:
         self._paused = not self._paused
-        self._set_mouse_visible(self._paused)
-
-    @staticmethod
-    def _set_mouse_visible(visible: bool) -> None:
-        services.input.set_mouse_captured(not visible)

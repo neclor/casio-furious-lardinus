@@ -6,7 +6,7 @@ import settings as Settings
 
 from gamekit.systems.actions import get_axis
 
-from systems.services import services
+import systems.services as services
 from actions import Actions
 from game.context import GameContext
 from game.objects.dynamic_objects.entities.entity import Entity
@@ -72,15 +72,8 @@ class Player(Entity):
 
 
     def _rotate(self, delta: float) -> None:
-        rel_x: float = services.input.mouse_delta().x
         turn: float = get_axis(Actions.TURN_LEFT, Actions.TURN_RIGHT, services.input)
-        yaw: float = (
-            (rel_x / Settings.resolution[0] / 4)
-            * Settings.fov_h
-            * Settings.camera_sensitivity
-            + turn * _TURN_SPEED * delta
-        )
-        self.rotation = (self.rotation + yaw) % (2 * math.pi)
+        self.rotation = (self.rotation + turn * _TURN_SPEED * delta) % (2 * math.pi)
 
 
     def _bob(self, delta: float) -> None:

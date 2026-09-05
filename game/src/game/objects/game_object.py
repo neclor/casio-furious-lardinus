@@ -1,8 +1,12 @@
 from gamekit.math.vectors.vector2 import Vector2
-from gamekit.systems.render.texture import Texture
 
 from game.context import GameContext
 from game.levels.tiles import Tile
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from systems.gint_renderer import GintTexture
 
 
 class GameObject:
@@ -30,7 +34,7 @@ class GameObject:
     radius: int
     position_z: float
     height: int
-    sprite: Texture | None
+    sprite: "GintTexture | None"
 
 
     def __init__(self, context: GameContext, position: Vector2) -> None:

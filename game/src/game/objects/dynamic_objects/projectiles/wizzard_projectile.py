@@ -1,6 +1,5 @@
 
-from gamekit.systems.render.texture import Texture
-from systems.services import services
+import systems.services as services
 from gamekit.math.vectors.vector2 import Vector2
 
 import settings as Settings
@@ -10,11 +9,6 @@ from game.objects.dynamic_objects.projectiles.projectile import Projectile
 from game.objects.dynamic_objects.entities.player import Player
 from game.objects.game_object import GameObject
 from game.levels.tiles import Tile
-
-
-_SPRITE: Texture = services.renderer.load_texture(
-    "src/assets/sprites/projectiles/wizzard_projectile_16.png"
-)
 
 
 class WizzardProjectile(Projectile):
@@ -33,7 +27,7 @@ class WizzardProjectile(Projectile):
         self.radius = 8
         self.position_z = -8.0
         self.height = 16
-        self.sprite = _SPRITE
+        self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/wizzard_projectile_16.png")
 
 
     def on_collision(self, other: GameObject | Tile) -> None:

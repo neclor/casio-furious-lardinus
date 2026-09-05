@@ -9,7 +9,6 @@ resolution: tuple[int, int] = (128, 64)
 fps: int = 30
 
 
-camera_sensitivity: float = 1.0
 fov_h: float = 2 * math.pi / 3
 
 

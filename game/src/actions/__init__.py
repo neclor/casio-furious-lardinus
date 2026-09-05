@@ -1,3 +1,3 @@
-from actions.definitions import Actions
+from actions import definitions as Actions
 
 __all__ = ["Actions"]

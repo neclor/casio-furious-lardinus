@@ -1,6 +1,6 @@
 from gamekit.systems.render.color import Color
 
-from systems.services import services
+import systems.services as services
 from game.context import GameContext
 from game.rendering.renderer_3d import Renderer3D
 from game.rendering.hud import Hud

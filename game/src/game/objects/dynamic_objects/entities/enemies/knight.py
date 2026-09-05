@@ -1,5 +1,5 @@
 
-from systems.services import services
+import systems.services as services
 from gamekit.math.vectors.vector2 import Vector2
 
 from game.context import GameContext

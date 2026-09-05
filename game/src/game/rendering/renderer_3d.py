@@ -3,18 +3,20 @@ import math
 
 from gamekit.math.vectors.vector2 import Vector2
 from gamekit.math.rects import Rect2, Rect2i
-from gamekit.systems.render.texture import Texture
 
 import settings as Settings
-from systems.services import services
+import systems.services as services
 from game.context import GameContext
 from game.objects.game_object import GameObject
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from systems.gint_renderer import GintTexture
+    _Projection = tuple[GintTexture, "Rect2i | None", Rect2, bool, float]
 
 
 _MIN_RAY_COUNT: int = 64
 _MAX_RAY_COUNT: int = Settings.resolution[0]
-
-_Projection = tuple[Texture, Rect2i | None, Rect2, bool, float]
 
 
 class Renderer3D:
@@ -108,7 +110,7 @@ class Renderer3D:
 
 
     def _draw_game(self) -> None:
-        projections: list[_Projection] = (
+        projections: "list[_Projection]" = (
             self._object_projections() + self._tile_map_projections()
         )
         projections.sort(key=lambda p: p[4], reverse=True)
@@ -116,8 +118,8 @@ class Renderer3D:
             services.renderer.draw_texture(texture, destination, src=src, flip_v=flip_v, z=1)
 
 
-    def _object_projections(self) -> list[_Projection]:
-        result: list[_Projection] = []
+    def _object_projections(self) -> "list[_Projection]":
+        result: "list[_Projection]" = []
         for game_object in self.context.world.objects:
             projection = self._object_projection(game_object)
             if projection is not None:
@@ -125,7 +127,7 @@ class Renderer3D:
         return result
 
 
-    def _object_projection(self, game_object: GameObject) -> _Projection | None:
+    def _object_projection(self, game_object: GameObject) -> "_Projection | None":
         if game_object.sprite is None:
             return None
 
@@ -153,8 +155,8 @@ class Renderer3D:
         )
 
 
-    def _tile_map_projections(self) -> list[_Projection]:
-        result: list[_Projection] = []
+    def _tile_map_projections(self) -> "list[_Projection]":
+        result: "list[_Projection]" = []
         ray_rotation = self._rotation - Settings.half_fov_h
         for _ in range(self._ray_count):
             result += self._cast_ray(ray_rotation)
@@ -162,14 +164,14 @@ class Renderer3D:
         return result
 
 
-    def _cast_ray(self, ray_rotation: float) -> list[_Projection]:
+    def _cast_ray(self, ray_rotation: float) -> "list[_Projection]":
         level = self.context.level
         tile_size = level.tile_size
         map_size = level.tile_map_size
         position = self._position
         camera_z = self._camera_position_z
 
-        tile_projections: list[_Projection] = []
+        tile_projections: "list[_Projection]" = []
 
         ray_relative_angle = ray_rotation - self._rotation
         ray_rotation = ray_rotation % (2 * math.pi)
@@ -313,9 +315,9 @@ class Renderer3D:
         distance: float,
         relative_top: float,
         relative_bottom: float,
-        texture: Texture,
-        src: Rect2i | None = None,
-    ) -> _Projection:
+        texture: "GintTexture",
+        src: "Rect2i | None" = None,
+    ) -> "_Projection":
         factor = Settings.resolution_x_div_double_tan_half_fov_h
         position_x = left_tan * factor + Settings.half_resolution[0]
         width = right_tan * factor + Settings.half_resolution[0] - position_x

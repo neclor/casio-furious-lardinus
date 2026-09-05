@@ -1,4 +1,7 @@
-from gamekit.systems.render.texture import Texture
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from systems.gint_renderer import GintTexture
 
 
 class Weapon:
@@ -6,7 +9,7 @@ class Weapon:
 
     name: str
     available: bool
-    sprite: Texture | None
+    sprite: "GintTexture | None"
     damage: int
     max_ammo: float
     ammo: float
