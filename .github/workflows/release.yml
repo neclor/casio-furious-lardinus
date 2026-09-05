@@ -67,7 +67,7 @@ jobs:
                 "$stage/src/systems/pygame_clock.py" \
                 "$stage/src/actions/pygame_bindings.py"
 
-          (cd "$RUNNER_TEMP/package" && zip -r "$GITHUB_WORKSPACE/$ASSET_BASENAME-$TAG-game.zip" game)
+          (cd "$RUNNER_TEMP/package" && zip -r "$GITHUB_WORKSPACE/$ASSET_BASENAME-$TAG.zip" game)
 
       - name: Copy PythonExtra g1a
         run: cp "$PYTHONEXTRA_G1A" "$GITHUB_WORKSPACE/PythonEx.g1a"
@@ -76,7 +76,7 @@ jobs:
         uses: actions/attest-build-provenance@v3
         with:
           subject-path: |
-            ${{ env.ASSET_BASENAME }}-${{ steps.tag.outputs.tag }}-game.zip
+            ${{ env.ASSET_BASENAME }}-${{ steps.tag.outputs.tag }}.zip
             PythonEx.g1a
 
       - name: Publish release assets
