@@ -1,16 +1,12 @@
 from gamekit.math.vectors.vector2 import Vector2
-
 import settings as Settings
-
 from flgame.context import GameContext
 from flgame.objects.game_object import GameObject
-
 
 class ActiveObject(GameObject):
     __slots__ = ()
 
-
-    def __init__(self, context: GameContext, position: Vector2) -> None:
+    def __init__(self, context, position):
         super().__init__(context, position)
         self.collision_layer = Settings.ACTIVE
         self.collision_mask = Settings.PLAYER

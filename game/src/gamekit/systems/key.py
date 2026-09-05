@@ -1,15 +1,12 @@
-LEFT: int = 60
-RIGHT: int = 61
-UP: int = 62
-
-ESCAPE: int = 52
-AC: int = 56
-
-NUM_2: int = 32
-NUM_4: int = 34
-NUM_6: int = 36
-NUM_8: int = 38
-
-F1: int = 80
-F2: int = 81
-F3: int = 82
+LEFT = 60
+RIGHT = 61
+UP = 62
+ESCAPE = 52
+AC = 56
+NUM_2 = 32
+NUM_4 = 34
+NUM_6 = 36
+NUM_8 = 38
+F1 = 80
+F2 = 81
+F3 = 82

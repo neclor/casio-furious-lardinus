@@ -1,30 +1,18 @@
-
 import systems.services as services
 from gamekit.math.vectors.vector2 import Vector2
-
 from flgame.context import GameContext
 from flgame.objects.active_objects.active_object import ActiveObject
 from flgame.objects.dynamic_objects.entities.player import Player
 from flgame.levels.tiles import Tile
-
-TYPE_CHECKING = False
-
-if TYPE_CHECKING:
-    from flgame.objects.game_object import GameObject
-
-
-_AMOUNT: int = 25
-
+_AMOUNT = 25
 
 class Ammo(ActiveObject):
     __slots__ = ()
 
-
-    def __init__(self, context: GameContext, position: Vector2) -> None:
+    def __init__(self, context, position):
         super().__init__(context, position)
-        self.sprite = services.renderer.load_texture("src/assets/sprites/objects/ammo_4.png")
+        self.sprite = services.renderer.load_texture('src/assets/sprites/objects/ammo_4.png')
 
-
-    def on_collision(self, other: "GameObject | Tile") -> None:
+    def on_collision(self, other):
         if isinstance(other, Player) and self.context.weapon_manager.add_ammo(_AMOUNT):
             self.context.world.remove(self)

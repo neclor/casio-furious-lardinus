@@ -1,29 +1,7 @@
-TYPE_CHECKING = False
-
-if TYPE_CHECKING:
-    from systems.gint_renderer import GintTexture
-
-
 class Weapon:
-    __slots__ = ("name", "available", "sprite", "damage", "max_ammo", "ammo", "cooldown")
+    __slots__ = ('name', 'available', 'sprite', 'damage', 'max_ammo', 'ammo', 'cooldown')
 
-    name: str
-    available: bool
-    sprite: "GintTexture | None"
-    damage: int
-    max_ammo: float
-    ammo: float
-    cooldown: float
-
-
-    def __init__(
-        self,
-        name: str,
-        damage: int,
-        max_ammo: float,
-        cooldown: float,
-        available: bool = True,
-    ) -> None:
+    def __init__(self, name, damage, max_ammo, cooldown, available=True):
         self.name = name
         self.available = available
         self.sprite = None
