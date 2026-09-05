@@ -7,11 +7,11 @@ from gamekit.math.rects import Rect2, Rect2i
 import settings as Settings
 import systems.services as services
 from flgame.context import GameContext
-from flgame.objects.game_object import GameObject
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from systems.gint_renderer import GintTexture
+    from flgame.objects.game_object import GameObject
     _Projection = tuple[GintTexture, "Rect2i | None", Rect2, bool, float]
 
 
@@ -127,7 +127,7 @@ class Renderer3D:
         return result
 
 
-    def _object_projection(self, game_object: GameObject) -> "_Projection | None":
+    def _object_projection(self, game_object: "GameObject") -> "_Projection | None":
         if game_object.sprite is None:
             return None
 

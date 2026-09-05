@@ -7,8 +7,12 @@ import settings as Settings
 from flgame.context import GameContext
 from flgame.objects.dynamic_objects.projectiles.projectile import Projectile
 from flgame.objects.dynamic_objects.entities.player import Player
-from flgame.objects.game_object import GameObject
 from flgame.levels.tiles import Tile
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from flgame.objects.game_object import GameObject
 
 
 class WizzardProjectile(Projectile):
@@ -30,7 +34,7 @@ class WizzardProjectile(Projectile):
         self.sprite = services.renderer.load_texture("src/assets/sprites/projectiles/wizzard_projectile_8.png")
 
 
-    def on_collision(self, other: GameObject | Tile) -> None:
+    def on_collision(self, other: "GameObject | Tile") -> None:
         if isinstance(other, Tile):
             self.context.world.remove(self)
         elif isinstance(other, Player):

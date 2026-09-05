@@ -4,11 +4,11 @@ from gamekit.math.vectors.vector2 import Vector2
 from gamekit.math.utils import clampf
 
 from flgame.context import GameContext
-from flgame.objects.game_object import GameObject
 from flgame.levels.tiles import Tile
 
 if TYPE_CHECKING:
     from flgame.levels.level import Level
+    from flgame.objects.game_object import GameObject
 
 
 def _detects(source: "GameObject | Tile", target: "GameObject | Tile") -> bool:
@@ -25,19 +25,19 @@ class PhysicsManager:
         self.context = context
 
 
-    def resolve(self, objects: list[GameObject]) -> None:
+    def resolve(self, objects: "list[GameObject]") -> None:
         i: int
-        game_object: GameObject
+        game_object: "GameObject"
         for i, game_object in enumerate(objects):
             if game_object.freed:
                 continue
-            other: GameObject
+            other: "GameObject"
             for other in objects[i + 1:]:
                 self._collide_pair(game_object, other)
             self._collide_tiles(game_object)
 
 
-    def _collide_pair(self, a: GameObject, b: GameObject) -> None:
+    def _collide_pair(self, a: "GameObject", b: "GameObject") -> None:
         detect_a: bool = _detects(a, b)
         detect_b: bool = _detects(b, a)
         if not (detect_a or detect_b):
@@ -71,7 +71,7 @@ class PhysicsManager:
             b.position -= push / 2
 
 
-    def _collide_tiles(self, game_object: GameObject) -> None:
+    def _collide_tiles(self, game_object: "GameObject") -> None:
         level: "Level" = self.context.level
         tile_size: Vector2 = level.tile_size
         position: Vector2 = game_object.position

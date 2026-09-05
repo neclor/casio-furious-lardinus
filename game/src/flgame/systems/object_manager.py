@@ -1,12 +1,15 @@
-from flgame.objects.game_object import GameObject
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from flgame.objects.game_object import GameObject
 
 
 class ObjectManager:
     __slots__ = ("objects", "_add_queue", "_remove_queue")
 
-    objects: list[GameObject]
-    _add_queue: list[GameObject]
-    _remove_queue: list[GameObject]
+    objects: "list[GameObject]"
+    _add_queue: "list[GameObject]"
+    _remove_queue: "list[GameObject]"
 
 
     def __init__(self) -> None:
@@ -15,23 +18,23 @@ class ObjectManager:
         self._remove_queue = []
 
 
-    def reset(self, objects: list[GameObject]) -> None:
+    def reset(self, objects: "list[GameObject]") -> None:
         self.objects = objects
         self._add_queue = []
         self._remove_queue = []
 
 
-    def add(self, game_object: GameObject) -> None:
+    def add(self, game_object: "GameObject") -> None:
         self._add_queue.append(game_object)
 
 
-    def remove(self, game_object: GameObject) -> None:
+    def remove(self, game_object: "GameObject") -> None:
         game_object.freed = True
         self._remove_queue.append(game_object)
 
 
     def update(self, delta: float) -> None:
-        game_object: GameObject
+        game_object: "GameObject"
         for game_object in self.objects:
             if not game_object.freed:
                 game_object.update(delta)
@@ -48,7 +51,7 @@ class ObjectManager:
 
 
     def _flush_removals(self) -> None:
-        game_object: GameObject
+        game_object: "GameObject"
         for game_object in self._remove_queue:
             if game_object in self.objects:
                 self.objects.remove(game_object)

@@ -1,7 +1,11 @@
 from flgame.context import GameContext
-from flgame.objects.game_object import GameObject
 from flgame.systems.object_manager import ObjectManager
 from flgame.systems.physics_manager import PhysicsManager
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from flgame.objects.game_object import GameObject
 
 
 class World:
@@ -19,19 +23,19 @@ class World:
 
 
     @property
-    def objects(self) -> list[GameObject]:
+    def objects(self) -> "list[GameObject]":
         return self.objects_manager.objects
 
 
-    def reset(self, objects: list[GameObject]) -> None:
+    def reset(self, objects: "list[GameObject]") -> None:
         self.objects_manager.reset(objects)
 
 
-    def add(self, game_object: GameObject) -> None:
+    def add(self, game_object: "GameObject") -> None:
         self.objects_manager.add(game_object)
 
 
-    def remove(self, game_object: GameObject) -> None:
+    def remove(self, game_object: "GameObject") -> None:
         self.objects_manager.remove(game_object)
 
 

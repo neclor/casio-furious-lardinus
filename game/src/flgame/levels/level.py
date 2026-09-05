@@ -12,12 +12,16 @@ from flgame.objects.dynamic_objects.entities.enemies.knight import Knight
 from flgame.objects.dynamic_objects.entities.enemies.skull import Skull
 from flgame.objects.dynamic_objects.entities.enemies.summoner import Summoner
 from flgame.objects.dynamic_objects.entities.enemies.wizzard import Wizzard
-from flgame.objects.game_object import GameObject
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from flgame.objects.game_object import GameObject
 
 
 class Level:
     _LAYOUTS: list[str] = Layouts.CAMPAIGN
-    _OBJECT_CLASSES: dict[str, type[GameObject]] = {
+    _OBJECT_CLASSES: "dict[str, type[GameObject]]" = {
         "A": Ammo,
         "M": Medikit,
         "K": Knight,
@@ -75,7 +79,7 @@ class Level:
         self.load()
 
 
-    def _parse(self, layout: str) -> tuple[Vector2, list[GameObject]]:
+    def _parse(self, layout: str) -> "tuple[Vector2, list[GameObject]]":
         text = layout.replace(" ", "").replace("\t", "")
         text = text.replace("\n", "").replace("\r", "").rstrip("/")
         rows = text.split("/")
@@ -88,7 +92,7 @@ class Level:
         self.min_point_z = 0.0
         self.max_point_z = 0.0
         self.tile_map = []
-        level_objects: list[GameObject] = []
+        level_objects: "list[GameObject]" = []
 
         for y, row in enumerate(rows[2:]):
             tile_row: list[Tile | None] = []
