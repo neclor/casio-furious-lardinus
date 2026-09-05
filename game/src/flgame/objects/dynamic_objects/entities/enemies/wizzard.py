@@ -4,8 +4,6 @@ from gamekit.math.vectors.vector2 import Vector2
 
 from flgame.context import GameContext
 from flgame.objects.dynamic_objects.entities.enemies.enemy import Enemy
-from flgame.objects.dynamic_objects.projectiles.wizzard_projectile import WizzardProjectile
-from flgame.objects.active_objects.ammo import Ammo
 
 
 _PROJECTILE_SPEED: int = 192
@@ -31,6 +29,7 @@ class Wizzard(Enemy):
     def attack(self) -> None:
         vector_to_player = self.context.player.position - self.position
         if vector_to_player.length() > 0:
+            from flgame.objects.dynamic_objects.projectiles.wizzard_projectile import WizzardProjectile
             self.context.world.add(
                 WizzardProjectile(
                     self.context,
@@ -42,4 +41,5 @@ class Wizzard(Enemy):
 
 
     def _drop_loot(self) -> None:
+        from flgame.objects.active_objects.ammo import Ammo
         self.context.world.add(Ammo(self.context, self.position.copy()))

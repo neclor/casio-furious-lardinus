@@ -4,10 +4,10 @@ from gamekit.math.vectors.vector2 import Vector2
 from gamekit.math.utils import clampf
 
 from flgame.context import GameContext
-from flgame.levels.tiles import Tile
 
 if TYPE_CHECKING:
     from flgame.levels.level import Level
+    from flgame.levels.tiles import Tile
     from flgame.objects.game_object import GameObject
 
 
@@ -88,7 +88,7 @@ class PhysicsManager:
         tx: int
         for ty in range(min_y, max_y + 1):
             for tx in range(min_x, max_x + 1):
-                tile: Tile | None = level.tile_map[ty][tx]
+                tile: "Tile | None" = level.tile_map[ty][tx]
                 if tile is None or not _detects(game_object, tile):
                     continue
 

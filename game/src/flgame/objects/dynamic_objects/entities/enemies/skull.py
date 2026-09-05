@@ -7,8 +7,12 @@ import settings as Settings
 from flgame.context import GameContext
 from flgame.objects.dynamic_objects.entities.enemies.enemy import Enemy
 from flgame.objects.dynamic_objects.entities.player import Player
-from flgame.objects.game_object import GameObject
-from flgame.levels.tiles import Tile
+
+TYPE_CHECKING = False
+
+if TYPE_CHECKING:
+    from flgame.objects.game_object import GameObject
+    from flgame.levels.tiles import Tile
 
 
 class Skull(Enemy):
@@ -31,7 +35,7 @@ class Skull(Enemy):
         self.damage = 5
 
 
-    def on_collision(self, other: GameObject | Tile) -> None:
+    def on_collision(self, other: "GameObject | Tile") -> None:
         if isinstance(other, Tile):
             self.die()
         elif isinstance(other, Player):

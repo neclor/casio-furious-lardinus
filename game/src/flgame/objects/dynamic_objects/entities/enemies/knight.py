@@ -4,7 +4,6 @@ from gamekit.math.vectors.vector2 import Vector2
 
 from flgame.context import GameContext
 from flgame.objects.dynamic_objects.entities.enemies.enemy import Enemy
-from flgame.objects.active_objects.medikit import Medikit
 
 
 class Knight(Enemy):
@@ -29,4 +28,5 @@ class Knight(Enemy):
 
 
     def _drop_loot(self) -> None:
+        from flgame.objects.active_objects.medikit import Medikit
         self.context.world.add(Medikit(self.context, self.position.copy()))

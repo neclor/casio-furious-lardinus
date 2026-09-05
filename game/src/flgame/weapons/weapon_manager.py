@@ -8,7 +8,6 @@ import systems.services as services
 from actions import Actions
 from flgame.context import GameContext
 from flgame.weapons.weapon import Weapon
-from flgame.objects.dynamic_objects.projectiles.player_projectile import PlayerProjectile
 
 
 _PROJECTILE_SPEED: int = 320
@@ -89,6 +88,8 @@ class WeaponManager:
 
 
     def _fire(self, spread: float) -> None:
+        from flgame.objects.dynamic_objects.projectiles.player_projectile import PlayerProjectile
+
         player = self.context.player
         velocity = Vector2(_PROJECTILE_SPEED, 0).rotated(
             player.rotation + spread

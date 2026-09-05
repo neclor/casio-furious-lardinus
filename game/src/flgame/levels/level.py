@@ -1,17 +1,11 @@
+import gc
+
 from gamekit.math.vectors.vector2 import Vector2
 from gamekit.systems.render.color import Color
 
 import flgame.levels.layouts as Layouts
 from flgame.context import GameContext
 from flgame.levels.tiles import Tile, TileSet, build_tile_set
-
-from flgame.objects.active_objects.ammo import Ammo
-from flgame.objects.active_objects.medikit import Medikit
-from flgame.objects.active_objects.exit import Exit
-from flgame.objects.dynamic_objects.entities.enemies.knight import Knight
-from flgame.objects.dynamic_objects.entities.enemies.skull import Skull
-from flgame.objects.dynamic_objects.entities.enemies.summoner import Summoner
-from flgame.objects.dynamic_objects.entities.enemies.wizzard import Wizzard
 
 TYPE_CHECKING = False
 
@@ -21,15 +15,6 @@ if TYPE_CHECKING:
 
 class Level:
     _LAYOUTS: list[str] = Layouts.CAMPAIGN
-    _OBJECT_CLASSES: "dict[str, type[GameObject]]" = {
-        "A": Ammo,
-        "M": Medikit,
-        "K": Knight,
-        "C": Skull,
-        "U": Summoner,
-        "W": Wizzard,
-        "E": Exit,
-    }
 
     __slots__ = (
         "context",
@@ -41,6 +26,7 @@ class Level:
         "min_point_z",
         "max_point_z",
         "_tile_set",
+        "_object_classes",
     )
 
     context: GameContext
@@ -52,12 +38,14 @@ class Level:
     min_point_z: float
     max_point_z: float
     _tile_set: TileSet
+    _object_classes: "dict[str, type[GameObject]]"
 
 
     def __init__(self, context: GameContext) -> None:
         self.context = context
         self.current_index = 0
         self._tile_set = build_tile_set()
+        self._object_classes = self._build_object_classes()
 
         self.floor_color = Color.BLACK
         self.tile_size = self._tile_set.tile_size
@@ -65,6 +53,46 @@ class Level:
         self.tile_map = []
         self.min_point_z = 0.0
         self.max_point_z = 0.0
+
+
+    @staticmethod
+    def _build_object_classes() -> "dict[str, type[GameObject]]":
+        # Each enemy/object class is imported one at a time, with gc.collect()
+        # in between, instead of all at once: importing this many classes (each
+        # pulling in the whole Entity -> DynamicObject -> GameObject chain the
+        # first time any of them runs) in one continuous burst is one of the
+        # largest compiles the device has to do in one go.
+        classes: "dict[str, type[GameObject]]" = {}
+
+        from flgame.objects.active_objects.ammo import Ammo
+        classes["A"] = Ammo
+        gc.collect()
+
+        from flgame.objects.active_objects.medikit import Medikit
+        classes["M"] = Medikit
+        gc.collect()
+
+        from flgame.objects.active_objects.exit import Exit
+        classes["E"] = Exit
+        gc.collect()
+
+        from flgame.objects.dynamic_objects.entities.enemies.knight import Knight
+        classes["K"] = Knight
+        gc.collect()
+
+        from flgame.objects.dynamic_objects.entities.enemies.skull import Skull
+        classes["C"] = Skull
+        gc.collect()
+
+        from flgame.objects.dynamic_objects.entities.enemies.summoner import Summoner
+        classes["U"] = Summoner
+        gc.collect()
+
+        from flgame.objects.dynamic_objects.entities.enemies.wizzard import Wizzard
+        classes["W"] = Wizzard
+        gc.collect()
+
+        return classes
 
 
     def load(self) -> None:
@@ -112,7 +140,7 @@ class Level:
                     self.min_point_z = min(top, bottom, self.min_point_z)
                     self.max_point_z = max(top, bottom, self.max_point_z)
 
-                object_class = self._OBJECT_CLASSES.get(char)
+                object_class = self._object_classes.get(char)
                 if object_class is not None:
                     level_objects.append(object_class(self.context, center))
             self.tile_map.append(tile_row)
