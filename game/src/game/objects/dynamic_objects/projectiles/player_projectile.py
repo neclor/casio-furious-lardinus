@@ -1,0 +1,41 @@
+
+from gamekit.systems.render.texture import Texture
+from systems.services import services
+from gamekit.math.vectors import Vector2
+
+import settings as Settings
+
+from game.context import GameContext
+from game.objects.dynamic_objects.projectiles.projectile import Projectile
+from game.objects.dynamic_objects.entities.enemies.enemy import Enemy
+from game.objects.game_object import GameObject
+from game.levels.tiles import Tile
+
+
+_SPRITE: Texture = services.renderer.load_texture(
+    "src/assets/sprites/projectiles/player_projectile_8.png"
+)
+
+
+class PlayerProjectile(Projectile):
+    __slots__ = ()
+
+
+    def __init__(
+        self,
+        context: GameContext,
+        damage: int,
+        position: Vector2,
+        velocity: Vector2,
+    ) -> None:
+        super().__init__(context, damage, position, velocity)
+        self.collision_mask = Settings.WALL | Settings.ENEMY
+        self.sprite = _SPRITE
+
+
+    def on_collision(self, other: GameObject | Tile) -> None:
+        if isinstance(other, Tile):
+            self.context.world.remove(self)
+        elif isinstance(other, Enemy):
+            other.take_damage(self.damage)
+            self.context.world.remove(self)

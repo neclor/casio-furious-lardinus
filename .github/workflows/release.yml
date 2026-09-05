@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  push:
+    tags: ['[0-9]+.[0-9]+.[0-9]+']
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to (re)release
+        required: true
+
+concurrency:
+  group: release-${{ github.event.release.tag_name || inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+env:
+  ASSET_BASENAME: game
+  PYTHONEXTRA_G1A: tools/PythonExtra-pe-0.4.0-beta/PythonEx.g1a
+
+jobs:
+  release:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve tag
+        id: tag
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          case "$GITHUB_EVENT_NAME" in
+            push)              tag="$GITHUB_REF_NAME" ;;
+            release)           tag="$RELEASE_TAG" ;;
+            workflow_dispatch) tag="$INPUT_TAG" ;;
+            *) echo "::error::unexpected event '$GITHUB_EVENT_NAME'"; exit 1 ;;
+          esac
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+
+      - name: Package calculator game files
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          stage="$RUNNER_TEMP/package/game"
+          mkdir -p "$stage"
+          cp -r game/lib "$stage/lib"
+          cp -r game/src "$stage/src"
+
+          find "$stage" -type d -name "__pycache__" -prune -exec rm -rf {} +
+          find "$stage" -name "*.pyc" -delete
+          find "$stage/src/assets" -name "*.png" -delete
+          find "$stage/src/assets/fonts" -type f -delete
+
+          rm -f "$stage/src/systems/pygame_renderer.py" \
+                "$stage/src/systems/pygame_input.py" \
+                "$stage/src/systems/pygame_clock.py" \
+                "$stage/src/actions/pygame_bindings.py"
+
+          (cd "$RUNNER_TEMP/package" && zip -r "$GITHUB_WORKSPACE/$ASSET_BASENAME-$TAG-game.zip" game)
+
+      - name: Copy PythonExtra g1a
+        run: cp "$PYTHONEXTRA_G1A" "$GITHUB_WORKSPACE/PythonEx.g1a"
+
+      - name: Attest release asset provenance
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: |
+            ${{ env.ASSET_BASENAME }}-${{ steps.tag.outputs.tag }}-game.zip
+            PythonEx.g1a
+
+      - name: Publish release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # Tag push / manual run: stage a draft as the approval gate.
+          # `release: published` only fires once the draft is published, and the
+          # release already exists by then, so create is skipped.
+          gh release view "$TAG" >/dev/null 2>&1 \
+            || gh release create "$TAG" --title "$TAG" --generate-notes --draft
+          gh release upload "$TAG" "$ASSET_BASENAME-$TAG-game.zip" PythonEx.g1a --clobber
