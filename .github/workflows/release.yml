@@ -23,6 +23,7 @@ permissions:
 env:
   ASSET_BASENAME: game
   PYTHONEXTRA_G1A: tools/PythonExtra-pe-0.4.0-beta/PythonEx.g1a
+  PYTHONEXTRA_TAG: pe-0.4.0-beta
 
 jobs:
   release:
@@ -59,24 +60,40 @@ jobs:
       - name: Build gint textures
         run: python tools/build_gint_textures.py
 
+      - name: Clone PythonExtra source (mpy-cross)
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch "$PYTHONEXTRA_TAG" \
+            https://git.planet-casio.com/Lephenixnoir/PythonExtra.git \
+            "$RUNNER_TEMP/pythonextra-src"
+
+      - name: Build mpy-cross
+        run: make -C "$RUNNER_TEMP/pythonextra-src/mpy-cross"
+
       - name: Package calculator game files
         env:
           TAG: ${{ steps.tag.outputs.tag }}
+          MPY_CROSS: ${{ runner.temp }}/pythonextra-src/mpy-cross/build/mpy-cross
         run: |
           set -euo pipefail
           stage="$RUNNER_TEMP/package/game"
           mkdir -p "$stage"
-          cp -r game/src "$stage/src"
+
+          # Precompiles every .py to .mpy bytecode in one pass (except main.py,
+          # the entry point PythonExtra launches from its file browser), so the
+          # calculator never has to compile from source on-device -- by far the
+          # most memory-hungry step on its tiny heap.
+          python tools/build_mpy.py "$MPY_CROSS" game/src "$stage/src"
+          # Older tags kept gamekit as a sibling "lib" folder instead of nesting
+          # it under src; compile it too so re-releasing those tags still works.
+          if [ -d game/lib ]; then
+            python tools/build_mpy.py "$MPY_CROSS" game/lib "$stage/lib"
+          fi
 
           find "$stage" -type d -name "__pycache__" -prune -exec rm -rf {} +
           find "$stage" -name "*.pyc" -delete
           find "$stage/src/assets" -name "*.png" -delete
           find "$stage/src/assets/fonts" -type f -delete
-
-          rm -f "$stage/src/systems/pygame_renderer.py" \
-                "$stage/src/systems/pygame_input.py" \
-                "$stage/src/systems/pygame_clock.py" \
-                "$stage/src/actions/pygame_bindings.py"
 
           (cd "$RUNNER_TEMP/package" && zip -r "$GITHUB_WORKSPACE/$ASSET_BASENAME-$TAG.zip" game)
 
