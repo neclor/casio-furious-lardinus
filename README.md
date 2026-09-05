@@ -3,7 +3,7 @@
 A first-person raycaster shooter written in Python, built to run on a Casio fx-9860G-family
 graphing calculator (mono, 128×64) through [PythonExtra](https://github.com/TheRainbowPhoenix/PythonExtra).
 
-Game logic lives on top of a small platform-agnostic engine, `gamekit` (`game/lib/gamekit`),
+Game logic lives on top of a small platform-agnostic engine, `gamekit` (`game/src/gamekit`),
 which abstracts vectors, rects, rendering and input behind a common API — the game code itself
 never talks to `gint` directly.
 
@@ -20,8 +20,8 @@ never talks to `gint` directly.
 
 ```
 game/
-  lib/gamekit/     platform-agnostic engine: Vector2/Rect2, Input, Renderer, Clock abstractions
   src/
+    gamekit/       platform-agnostic engine: Vector2/Rect2, Input, Renderer, Clock abstractions
     game/          game logic (levels, objects, weapons, rendering) — engine-only, no gint
     systems/       platform backends: gint_renderer.py, gint_input.py, gint_clock.py
     actions/       device-agnostic action/binding system (Actions.MOVE_FORWARD, ...)
@@ -43,10 +43,10 @@ tools/
 ## Installing on a calculator
 
 1. Grab the latest [release](../../releases) — it contains `PythonEx.g1a` and a
-   `furious-lardinus-<version>-game.zip`.
+   `game-<version>.zip`.
 2. If PythonExtra isn't installed yet: connect the calculator via USB in storage mode and copy
    `PythonEx.g1a` to its root — the calculator installs it as an add-in.
-3. Extract `furious-lardinus-<version>-game.zip` and copy the resulting `game` folder onto the
+3. Extract `game-<version>.zip` and copy the resulting `game` folder onto the
    calculator's storage (same USB connection).
 4. Open PythonExtra on the calculator, browse to `game/src/main.py` and run it.
 

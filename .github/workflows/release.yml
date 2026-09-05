@@ -55,7 +55,6 @@ jobs:
           set -euo pipefail
           stage="$RUNNER_TEMP/package/game"
           mkdir -p "$stage"
-          cp -r game/lib "$stage/lib"
           cp -r game/src "$stage/src"
 
           find "$stage" -type d -name "__pycache__" -prune -exec rm -rf {} +

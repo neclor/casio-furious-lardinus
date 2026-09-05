@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+TYPE_CHECKING = False
 
 from gamekit.math.vectors import Vector2
 from gamekit.math.utils import clampf
