@@ -91,4 +91,4 @@ jobs:
           # release already exists by then, so create is skipped.
           gh release view "$TAG" >/dev/null 2>&1 \
             || gh release create "$TAG" --title "$TAG" --generate-notes --draft
-          gh release upload "$TAG" "$ASSET_BASENAME-$TAG-game.zip" PythonEx.g1a --clobber
+          gh release upload "$TAG" "$ASSET_BASENAME-$TAG.zip" PythonEx.g1a --clobber
